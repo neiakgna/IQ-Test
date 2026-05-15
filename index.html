@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Cognition Index — A 30-Question IQ Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #14161b;
+    --ink-2: #1c1f27;
+    --panel: #20242e;
+    --line: #343a47;
+    --paper: #ece4d4;
+    --paper-dim: #b6ad9b;
+    --paper-faint: #7d7768;
+    --amber: #f0a92b;
+    --amber-deep: #c9821a;
+    --green: #6fae6a;
+    --red: #d9694f;
+    --blue: #6f9fd0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Spectral', Georgia, serif;
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(240, 169, 43, 0.07), transparent),
+      linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+    background-size: auto, 44px 44px, 44px 44px;
+    min-height: 100%;
+  }
+
+  /* Film-grain overlay */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    z-index: 999;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* Primitives */
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+
+  button { font-family: 'JetBrains Mono', monospace; cursor: pointer; }
+
+  .btn-primary {
+    background: var(--amber);
+    color: var(--ink);
+    border: none;
+    padding: 15px 34px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 6px 22px rgba(240, 169, 43, 0.22);
+  }
+  .btn-primary:hover {
+    background: #ffbe45;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(240, 169, 43, 0.32);
+  }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled {
+    opacity: 0.32;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--paper-dim);
+    border: 1px solid var(--line);
+    padding: 14px 26px;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .btn-ghost:hover:not(:disabled) { border-color: var(--paper-dim); color: var(--paper); }
+  .btn-ghost:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .screen { display: none; }
+  .screen.active { display: block; animation: rise 0.5s ease both; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Intro */
+  .intro { padding-top: 84px; }
+
+  .masthead {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 46px;
+  }
+  .masthead .mark {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--paper-faint);
+  }
+
+  h1.title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(44px, 8vw, 82px);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    margin: 22px 0 0;
+  }
+  h1.title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--amber);
+  }
+
+  .lede {
+    font-size: 19px;
+    color: var(--paper-dim);
+    max-width: 52ch;
+    margin: 26px 0 0;
+  }
+
+  .specsheet {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin: 44px 0;
+  }
+  .spec {
+    background: var(--ink-2);
+    padding: 20px 18px;
+  }
+  .spec .k {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--paper-faint);
+  }
+  .spec .v {
+    font-family: 'Fraunces', serif;
+    font-size: 30px;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+  .spec .v small {
+    font-size: 13px;
+    color: var(--paper-dim);
+    font-family: 'Spectral', serif;
+    font-weight: 400;
+  }
+
+  .domains { margin: 40px 0; }
+  .domains .eyebrow { display: block; margin-bottom: 16px; }
+  .domain-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .domain-row:first-of-type { border-top: 1px solid var(--line); }
+  .domain-row .name { font-size: 17px; }
+  .domain-row .desc { color: var(--paper-faint); font-size: 14px; font-style: italic; }
+  .domain-row .count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--amber);
+  }
+
+  .start-block {
+    margin-top: 46px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .disclaimer {
+    font-size: 13px;
+    color: var(--paper-faint);
+    font-style: italic;
+    max-width: 40ch;
+  }
+
+  /* Exam */
+  .exam { padding-top: 30px; }
+
+  .exambar {
+    position: sticky;
+    top: 0;
+    background: rgba(20, 22, 27, 0.94);
+    backdrop-filter: blur(8px);
+    margin: 0 -24px;
+    padding: 16px 24px 0;
+    z-index: 5;
+    border-bottom: 1px solid var(--line);
+  }
+  .exambar-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .qcount {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    color: var(--paper-dim);
+  }
+  .qcount b { color: var(--paper); }
+  .timer {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 6px 14px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    color: var(--paper);
+  }
+  .timer.warn { color: var(--amber); border-color: var(--amber-deep); }
+  .timer.crit { color: var(--red); border-color: var(--red); animation: pulse 1s infinite; }
+  @keyframes pulse { 50% { opacity: 0.55; } }
+
+  .progress-track {
+    height: 3px;
+    background: var(--line);
+    position: relative;
+  }
+  .progress-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    background: var(--amber);
+    width: 0;
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .qcard { padding: 50px 0 20px; }
+  .qtag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 18px;
+  }
+  .qtext {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(24px, 4.4vw, 33px);
+    line-height: 1.28;
+    letter-spacing: -0.01em;
+  }
+  .qtext .seq {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82em;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--amber);
+  }
+
+  .options {
+    margin-top: 34px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    text-align: left;
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+    color: var(--paper);
+    padding: 17px 20px;
+    border-radius: 2px;
+    font-family: 'Spectral', serif;
+    font-size: 18px;
+    transition: border-color 0.14s ease, background 0.14s ease;
+  }
+  .option:hover { border-color: var(--paper-faint); background: var(--panel); }
+  .option .key {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    width: 26px;
+    height: 26px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    color: var(--paper-faint);
+    transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease;
+  }
+  .option.selected {
+    border-color: var(--amber);
+    background: rgba(240, 169, 43, 0.08);
+  }
+  .option.selected .key {
+    background: var(--amber);
+    border-color: var(--amber);
+    color: var(--ink);
+  }
+
+  .examnav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    padding-top: 26px;
+    border-top: 1px solid var(--line);
+  }
+
+  /* Results */
+  .results { padding-top: 70px; }
+
+  .score-hero {
+    text-align: center;
+    padding: 30px 0 10px;
+  }
+  .score-hero .eyebrow { display: block; margin-bottom: 20px; }
+  .iq-number {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(96px, 22vw, 200px);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--amber);
+  }
+  .iq-band {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 26px;
+    margin-top: 8px;
+  }
+  .iq-raw {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--paper-dim);
+    letter-spacing: 0.1em;
+    margin-top: 14px;
+    text-transform: uppercase;
+  }
+  .iq-readout {
+    font-size: 17px;
+    color: var(--paper-dim);
+    max-width: 50ch;
+    margin: 26px auto 0;
+    text-align: center;
+  }
+
+  .breakdown { margin: 50px 0 10px; }
+  .breakdown .eyebrow { display: block; margin-bottom: 18px; }
+  .cat {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .cat:first-of-type { border-top: 1px solid var(--line); }
+  .cat-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 9px;
+  }
+  .cat-name { font-size: 18px; }
+  .cat-score {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--paper-dim);
+  }
+  .cat-score b { color: var(--paper); }
+  .bar-track {
+    height: 6px;
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+  }
+  .bar-fill {
+    height: 100%;
+    background: var(--blue);
+    width: 0;
+    transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .review { margin: 50px 0 10px; }
+  .review .eyebrow { display: block; margin-bottom: 18px; }
+  .rev-item {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 14px;
+  }
+  .rev-item:first-of-type { border-top: 1px solid var(--line); }
+  .rev-mark {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .rev-mark.ok { color: var(--green); }
+  .rev-mark.no { color: var(--red); }
+  .rev-q { font-size: 16px; line-height: 1.45; }
+  .rev-a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    margin-top: 7px;
+    color: var(--paper-faint);
+  }
+  .rev-a .good { color: var(--green); }
+  .rev-a .bad { color: var(--red); text-decoration: line-through; }
+
+  .results-foot {
+    margin-top: 46px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 620px) {
+    .specsheet { grid-template-columns: repeat(2, 1fr); }
+    .masthead { flex-direction: column; gap: 4px; align-items: flex-start; }
+    .domain-row { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <section id="intro" class="screen active intro">
+    <div class="masthead">
+      <span class="mark">COGNITION INDEX</span>
+      <span class="mark">FORM A · 2026</span>
+    </div>
+
+    <span class="eyebrow">A timed reasoning assessment</span>
+    <h1 class="title">Thirty questions<br />between you and<br />your <em>number</em>.</h1>
+    <p class="lede">A composite test of reasoning across five cognitive domains. Work quickly and carefully — the clock is part of the measure.</p>
+
+    <div class="specsheet">
+      <div class="spec"><div class="k">Questions</div><div class="v">30</div></div>
+      <div class="spec"><div class="k">Time limit</div><div class="v">25<small> min</small></div></div>
+      <div class="spec"><div class="k">Domains</div><div class="v">5</div></div>
+      <div class="spec"><div class="k">Format</div><div class="v">4<small> choice</small></div></div>
+    </div>
+
+    <div class="domains">
+      <span class="eyebrow">What you'll be measured on</span>
+      <div class="domain-row">
+        <span><span class="name">Numerical reasoning</span> &nbsp;<span class="desc">sequences &amp; relationships</span></span>
+        <span class="count">6 Q</span>
+      </div>
+      <div class="domain-row">
+        <span><span class="name">Verbal reasoning</span> &nbsp;<span class="desc">analogy &amp; relation</span></span>
+        <span class="count">6 Q</span>
+      </div>
+      <div class="domain-row">
+        <span><span class="name">Logical deduction</span> &nbsp;<span class="desc">inference &amp; consistency</span></span>
+        <span class="count">6 Q</span>
+      </div>
+      <div class="domain-row">
+        <span><span class="name">Abstract patterns</span> &nbsp;<span class="desc">symbol &amp; series logic</span></span>
+        <span class="count">6 Q</span>
+      </div>
+      <div class="domain-row">
+        <span><span class="name">Spatial reasoning</span> &nbsp;<span class="desc">form &amp; rotation</span></span>
+        <span class="count">6 Q</span>
+      </div>
+    </div>
+
+    <div class="start-block">
+      <button type="button" class="btn-primary" id="startBtn">Begin the test</button>
+      <p class="disclaimer">For entertainment and self-reflection only. This is not a clinically validated or proctored IQ assessment.</p>
+    </div>
+  </section>
+
+  <section id="exam" class="screen exam">
+    <div class="exambar">
+      <div class="exambar-row">
+        <span class="qcount">QUESTION <b id="qNow">01</b> / 30</span>
+        <span class="timer" id="timer" role="timer" aria-label="Time remaining">25:00</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progress"></div></div>
+    </div>
+
+    <div class="qcard">
+      <div class="qtag" id="qTag"></div>
+      <div class="qtext" id="qText"></div>
+      <div class="options" id="options" role="group" aria-label="Answer choices"></div>
+    </div>
+
+    <div class="examnav">
+      <button type="button" class="btn-ghost" id="prevBtn">&larr; Previous</button>
+      <button type="button" class="btn-primary" id="nextBtn">Next &rarr;</button>
+    </div>
+  </section>
+
+  <section id="results" class="screen results">
+    <div class="score-hero">
+      <span class="eyebrow">Estimated cognitive index</span>
+      <div class="iq-number" id="iqNumber">—</div>
+      <div class="iq-band" id="iqBand"></div>
+      <div class="iq-raw" id="iqRaw"></div>
+    </div>
+    <p class="iq-readout" id="iqReadout"></p>
+
+    <div class="breakdown">
+      <span class="eyebrow">Performance by domain</span>
+      <div id="catList"></div>
+    </div>
+
+    <div class="review">
+      <span class="eyebrow">Answer review</span>
+      <div id="reviewList"></div>
+    </div>
+
+    <div class="results-foot">
+      <button type="button" class="btn-primary" id="retakeBtn">Take it again</button>
+      <p class="disclaimer">Scores are an estimate mapped from raw performance. Real cognitive assessment requires a trained professional.</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  const CONFIG = {
+    timeLimitSeconds: 25 * 60,
+    warnThreshold: 300,
+    critThreshold: 60,
+  };
+
+  const OPTION_KEYS = ['A', 'B', 'C', 'D'];
+
+  const CATEGORIES = {
+    numerical: 'Numerical reasoning',
+    verbal: 'Verbal reasoning',
+    logic: 'Logical deduction',
+    abstract: 'Abstract patterns',
+    spatial: 'Spatial reasoning',
+  };
+
+  // Question bank. `answer` is the zero-based index of the correct option;
+  // `category` keys into CATEGORIES. Items are interleaved by domain so the
+  // test doesn't run in predictable blocks.
+  const QUESTIONS = [
+    { category: 'numerical', answer: 2,
+      q: 'What number continues the sequence? <span class="seq">2, 4, 8, 16, ?</span>',
+      options: ['20', '24', '32', '30'] },
+    { category: 'verbal', answer: 1,
+      q: '<span class="seq">Finger</span> is to <span class="seq">Hand</span> as <span class="seq">Toe</span> is to ___',
+      options: ['Leg', 'Foot', 'Knee', 'Ankle'] },
+    { category: 'abstract', answer: 1,
+      q: 'What letter continues the series? <span class="seq">A, C, E, G, ?</span>',
+      options: ['H', 'I', 'J', 'K'] },
+    { category: 'logic', answer: 2,
+      q: 'Tom is taller than Sarah. Sarah is taller than Mike. Who is the shortest?',
+      options: ['Tom', 'Sarah', 'Mike', 'Cannot be determined'] },
+    { category: 'spatial', answer: 1,
+      q: 'How many faces does a cube have?',
+      options: ['4', '6', '8', '12'] },
+
+    { category: 'numerical', answer: 1,
+      q: 'What number continues the sequence? <span class="seq">1, 1, 2, 3, 5, 8, ?</span>',
+      options: ['11', '13', '12', '10'] },
+    { category: 'verbal', answer: 2,
+      q: '<span class="seq">Bird</span> is to <span class="seq">Sky</span> as <span class="seq">Fish</span> is to ___',
+      options: ['Scales', 'Boat', 'Water', 'Fin'] },
+    { category: 'abstract', answer: 1,
+      q: 'What letter continues the series? <span class="seq">Z, X, V, T, ?</span>',
+      options: ['S', 'R', 'Q', 'P'] },
+    { category: 'logic', answer: 1,
+      q: 'A train departs at 3:00 PM and arrives at 5:30 PM. How long is the journey?',
+      options: ['2 hours', '2 hours 30 minutes', '3 hours', '1 hour 30 minutes'] },
+    { category: 'spatial', answer: 1,
+      q: 'A flat net of six squares arranged in a cross shape folds up into a ___',
+      options: ['Pyramid', 'Cube', 'Cone', 'Prism'] },
+
+    { category: 'numerical', answer: 1,
+      q: 'What number continues the sequence? <span class="seq">3, 6, 11, 18, 27, ?</span>',
+      options: ['36', '38', '40', '35'] },
+    { category: 'verbal', answer: 1,
+      q: '<span class="seq">Hot</span> is to <span class="seq">Cold</span> as <span class="seq">Up</span> is to ___',
+      options: ['High', 'Down', 'Top', 'Side'] },
+    { category: 'abstract', answer: 0,
+      q: 'What pair continues the series? <span class="seq">AZ, BY, CX, DW, ?</span>',
+      options: ['EV', 'EW', 'FV', 'EU'] },
+    { category: 'logic', answer: 1,
+      q: 'Rearranging the letters <span class="seq">CIFAIPC</span> spells the name of a(n) ___',
+      options: ['Country', 'Ocean', 'Animal', 'Planet'] },
+    { category: 'spatial', answer: 1,
+      q: 'On a clock face, what is the angle between the hands at exactly 3:00?',
+      options: ['45°', '90°', '120°', '180°'] },
+
+    { category: 'numerical', answer: 2,
+      q: 'What number continues the sequence? <span class="seq">100, 96, 88, 76, ?</span>',
+      options: ['68', '64', '60', '56'] },
+    { category: 'verbal', answer: 1,
+      q: '<span class="seq">Doctor</span> is to <span class="seq">Hospital</span> as <span class="seq">Teacher</span> is to ___',
+      options: ['Student', 'School', 'Book', 'Lesson'] },
+    { category: 'abstract', answer: 2,
+      q: 'What number continues the series? <span class="seq">2, 3, 5, 7, 11, 13, ?</span>',
+      options: ['15', '16', '17', '19'] },
+    { category: 'logic', answer: 2,
+      q: 'Which word does NOT belong with the others?',
+      options: ['Apple', 'Banana', 'Carrot', 'Grape'] },
+    { category: 'spatial', answer: 2,
+      q: 'How many edges does a triangular pyramid (tetrahedron) have?',
+      options: ['4', '5', '6', '8'] },
+
+    { category: 'numerical', answer: 1,
+      q: 'What number continues the sequence? <span class="seq">1, 4, 9, 16, 25, ?</span>',
+      options: ['30', '36', '35', '49'] },
+    { category: 'verbal', answer: 2,
+      q: '<span class="seq">Author</span> is to <span class="seq">Book</span> as <span class="seq">Painter</span> is to ___',
+      options: ['Brush', 'Canvas', 'Painting', 'Colour'] },
+    { category: 'abstract', answer: 1,
+      q: 'What letter continues the series? <span class="seq">J, F, M, A, M, ?</span>',
+      options: ['A', 'J', 'S', 'M'] },
+    { category: 'logic', answer: 1,
+      q: 'Mary has 3 brothers, and each of her brothers has 2 sisters. How many children are in the family?',
+      options: ['4', '5', '6', '7'] },
+    { category: 'spatial', answer: 2,
+      q: 'If you rotate the lowercase letter <span class="seq">b</span> by 180°, which letter does it resemble?',
+      options: ['d', 'p', 'q', 'b'] },
+
+    { category: 'numerical', answer: 2,
+      q: 'What number continues the sequence? <span class="seq">2, 6, 12, 20, 30, ?</span>',
+      options: ['36', '40', '42', '44'] },
+    { category: 'verbal', answer: 0,
+      q: '<span class="seq">Puppy</span> is to <span class="seq">Dog</span> as <span class="seq">Kitten</span> is to ___',
+      options: ['Cat', 'Mouse', 'Paw', 'Fur'] },
+    { category: 'abstract', answer: 1,
+      q: 'What pair continues the series? <span class="seq">AB, BC, CD, DE, ?</span>',
+      options: ['DF', 'EF', 'FG', 'EG'] },
+    { category: 'logic', answer: 1,
+      q: 'All roses are flowers. Some flowers fade quickly. Therefore, the statement "all roses fade quickly" is ___',
+      options: ['Logically valid', 'Not logically valid', 'Always true', 'Proven by the premises'] },
+    { category: 'spatial', answer: 0,
+      q: 'A cube is painted on all six faces, then cut into 27 equal smaller cubes. How many small cubes have exactly ONE painted face?',
+      options: ['6', '8', '12', '1'] },
+  ];
+
+  // Raw-score thresholds in descending order. bandForScore() returns the first
+  // entry the score clears, so the final { min: 0 } row is the catch-all.
+  const SCORE_BANDS = [
+    { min: 29, iq: '142', label: 'Exceptional',
+      note: 'A near-perfect performance under time pressure. Reasoning was sharp and consistent across every domain.' },
+    { min: 27, iq: '134', label: 'Very superior',
+      note: 'An excellent result. You handled the harder pattern and logic items with very little slippage.' },
+    { min: 24, iq: '126', label: 'Superior',
+      note: 'A strong, well-rounded performance, comfortably above the typical range, with only a few items lost.' },
+    { min: 21, iq: '118', label: 'High average',
+      note: 'A solid result above the midpoint. Most domains were handled well, with room to tighten one or two.' },
+    { min: 17, iq: '108', label: 'Average',
+      note: 'A balanced performance right around the typical range. Accuracy was steady but a few traps slipped through.' },
+    { min: 13, iq: '100', label: 'Average',
+      note: 'Squarely in the middle of the distribution. Speed or one weaker domain likely held the score back.' },
+    { min: 9, iq: '92', label: 'Low average',
+      note: 'A mixed run. Several domains came through, but pattern or logic items proved costly.' },
+    { min: 5, iq: '83', label: 'Below average',
+      note: 'A tougher result. It may help to slow down and re-read each item before committing to an answer.' },
+    { min: 0, iq: '75', label: 'Well below average',
+      note: 'Many items were missed. Time pressure or guessing may have played a large role; a calmer second attempt often helps.' },
+  ];
+
+  const dom = {};
+
+  const state = {
+    index: 0,
+    responses: new Array(QUESTIONS.length).fill(null),
+    remaining: CONFIG.timeLimitSeconds,
+    timerId: null,
+  };
+
+  const formatClock = (totalSeconds) => {
+    const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+    const seconds = String(totalSeconds % 60).padStart(2, '0');
+    return `${minutes}:${seconds}`;
+  };
+
+  const bandForScore = (correct) => SCORE_BANDS.find(({ min }) => correct >= min);
+
+  const showScreen = (id) => {
+    [dom.intro, dom.exam, dom.results].forEach((screen) => {
+      screen.classList.toggle('active', screen.id === id);
+    });
+  };
+
+  const renderQuestion = () => {
+    const question = QUESTIONS[state.index];
+    const selected = state.responses[state.index];
+
+    dom.qNow.textContent = String(state.index + 1).padStart(2, '0');
+    dom.qTag.textContent = CATEGORIES[question.category].toUpperCase();
+    dom.qText.innerHTML = question.q;
+    dom.progress.style.width = `${(state.index / QUESTIONS.length) * 100}%`;
+
+    dom.options.innerHTML = '';
+    question.options.forEach((text, i) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = i === selected ? 'option selected' : 'option';
+      button.dataset.choice = String(i);
+      button.setAttribute('aria-pressed', String(i === selected));
+      button.innerHTML = `<span class="key">${OPTION_KEYS[i]}</span><span>${text}</span>`;
+      dom.options.appendChild(button);
+    });
+
+    dom.prevBtn.disabled = state.index === 0;
+    dom.nextBtn.textContent =
+      state.index === QUESTIONS.length - 1 ? 'See results' : 'Next →';
+  };
+
+  const selectChoice = (choice) => {
+    state.responses[state.index] = choice;
+    Array.from(dom.options.children).forEach((button, i) => {
+      const isSelected = i === choice;
+      button.classList.toggle('selected', isSelected);
+      button.setAttribute('aria-pressed', String(isSelected));
+    });
+  };
+
+  const goTo = (delta) => {
+    if (delta > 0 && state.index === QUESTIONS.length - 1) {
+      finish();
+      return;
+    }
+    state.index = Math.min(Math.max(state.index + delta, 0), QUESTIONS.length - 1);
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const tickTimer = () => {
+    state.remaining -= 1;
+    dom.timer.textContent = formatClock(state.remaining);
+    dom.timer.classList.toggle(
+      'warn',
+      state.remaining <= CONFIG.warnThreshold && state.remaining > CONFIG.critThreshold,
+    );
+    dom.timer.classList.toggle('crit', state.remaining <= CONFIG.critThreshold);
+    if (state.remaining <= 0) finish();
+  };
+
+  const startTest = () => {
+    showScreen('exam');
+    renderQuestion();
+    state.timerId = window.setInterval(tickTimer, 1000);
+  };
+
+  const scoreResponses = () => {
+    const byCategory = {};
+    Object.keys(CATEGORIES).forEach((key) => {
+      byCategory[key] = { correct: 0, total: 0 };
+    });
+
+    let correct = 0;
+    QUESTIONS.forEach((question, i) => {
+      const bucket = byCategory[question.category];
+      bucket.total += 1;
+      if (state.responses[i] === question.answer) {
+        bucket.correct += 1;
+        correct += 1;
+      }
+    });
+
+    return { correct, byCategory };
+  };
+
+  const renderBreakdown = (byCategory) => {
+    dom.catList.innerHTML = '';
+    Object.entries(CATEGORIES).forEach(([key, label]) => {
+      const { correct, total } = byCategory[key];
+      const percent = Math.round((correct / total) * 100);
+      const row = document.createElement('div');
+      row.className = 'cat';
+      row.innerHTML =
+        '<div class="cat-top">' +
+          '<span class="cat-name">' + label + '</span>' +
+          '<span class="cat-score"><b>' + correct + '</b> / ' + total + '</span>' +
+        '</div>' +
+        '<div class="bar-track"><div class="bar-fill" data-percent="' + percent + '"></div></div>';
+      dom.catList.appendChild(row);
+    });
+
+    // Bars are inserted at width 0; flip them to their target width on the next
+    // frame so the CSS transition has a starting value to animate from.
+    requestAnimationFrame(() => {
+      dom.catList.querySelectorAll('.bar-fill').forEach((bar) => {
+        bar.style.width = bar.dataset.percent + '%';
+      });
+    });
+  };
+
+  const renderReview = () => {
+    dom.reviewList.innerHTML = '';
+    QUESTIONS.forEach((question, i) => {
+      const choice = state.responses[i];
+      const isCorrect = choice === question.answer;
+      const correctLabel = OPTION_KEYS[question.answer] + '. ' + question.options[question.answer];
+
+      let detail;
+      if (isCorrect) {
+        detail = '<span class="good">&#10003; ' + correctLabel + '</span>';
+      } else if (choice === null) {
+        detail = '<span class="bad">&mdash; not answered</span> &nbsp; correct: '
+          + '<span class="good">' + correctLabel + '</span>';
+      } else {
+        const chosenLabel = OPTION_KEYS[choice] + '. ' + question.options[choice];
+        detail = '<span class="bad">' + chosenLabel + '</span> &nbsp; correct: '
+          + '<span class="good">' + correctLabel + '</span>';
+      }
+
+      const item = document.createElement('div');
+      item.className = 'rev-item';
+      item.innerHTML =
+        '<div class="rev-mark ' + (isCorrect ? 'ok' : 'no') + '" aria-hidden="true">'
+          + (isCorrect ? '&#10003;' : '&#10007;') + '</div>'
+        + '<div>'
+          + '<div class="rev-q"><b>' + (i + 1) + '.</b> ' + question.q + '</div>'
+          + '<div class="rev-a">' + detail + '</div>'
+        + '</div>';
+      dom.reviewList.appendChild(item);
+    });
+  };
+
+  function finish() {
+    window.clearInterval(state.timerId);
+
+    const { correct, byCategory } = scoreResponses();
+    const band = bandForScore(correct);
+    const accuracy = Math.round((correct / QUESTIONS.length) * 100);
+
+    dom.iqNumber.textContent = band.iq;
+    dom.iqBand.textContent = '"' + band.label + '"';
+    dom.iqRaw.textContent = correct + ' / ' + QUESTIONS.length + ' correct · ' + accuracy + '% accuracy';
+    dom.iqReadout.textContent = band.note;
+
+    renderBreakdown(byCategory);
+    renderReview();
+
+    showScreen('results');
+    window.scrollTo({ top: 0 });
+  }
+
+  const handleKeydown = (event) => {
+    if (!dom.exam.classList.contains('active')) return;
+
+    const choice = OPTION_KEYS.indexOf(event.key.toUpperCase());
+    if (choice !== -1 && choice < QUESTIONS[state.index].options.length) {
+      selectChoice(choice);
+    } else if (event.key === 'ArrowRight') {
+      goTo(1);
+    } else if (event.key === 'ArrowLeft') {
+      goTo(-1);
+    }
+  };
+
+  const cacheDom = () => {
+    const ids = [
+      'intro', 'exam', 'results', 'startBtn', 'prevBtn', 'nextBtn', 'retakeBtn',
+      'qNow', 'qTag', 'qText', 'options', 'timer', 'progress',
+      'iqNumber', 'iqBand', 'iqRaw', 'iqReadout', 'catList', 'reviewList',
+    ];
+    ids.forEach((id) => { dom[id] = document.getElementById(id); });
+  };
+
+  const bindEvents = () => {
+    dom.startBtn.addEventListener('click', startTest);
+    dom.prevBtn.addEventListener('click', () => goTo(-1));
+    dom.nextBtn.addEventListener('click', () => goTo(1));
+    dom.retakeBtn.addEventListener('click', () => window.location.reload());
+
+    dom.options.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-choice]');
+      if (button) selectChoice(Number(button.dataset.choice));
+    });
+
+    document.addEventListener('keydown', handleKeydown);
+  };
+
+  cacheDom();
+  bindEvents();
+  dom.timer.textContent = formatClock(CONFIG.timeLimitSeconds);
+})();
+</script>
+</body>
+</html>
